@@ -1,0 +1,164 @@
+.studioContainer {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: var(--launch-surface, rgba(18, 18, 24, 0.88));
+	backdrop-filter: blur(28px) saturate(180%);
+	-webkit-backdrop-filter: blur(28px) saturate(180%);
+	border: 1px solid var(--launch-border-strong, rgba(255, 255, 255, 0.12));
+	border-radius: 24px;
+	box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+	overflow: hidden;
+	transition: width 0.3s cubic-bezier(0.2, 0.9, 0.3, 1), height 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+	pointer-events: auto;
+	user-select: none;
+	will-change: transform;
+}
+
+.studioHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 12px 18px;
+	background: rgba(0, 0, 0, 0.25);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	font-size: 13px;
+	color: #e4e4e7;
+	cursor: grab;
+	touch-action: none;
+}
+
+.studioHeader:active {
+	cursor: grabbing;
+}
+
+.studioTitle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+.recordingBadge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 8px;
+	border-radius: 9999px;
+	background: rgba(239, 68, 68, 0.2);
+	border: 1px solid rgba(239, 68, 68, 0.4);
+	color: #f87171;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.recDot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background-color: #ef4444;
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.4;
+		transform: scale(0.85);
+	}
+}
+
+.viewfinderWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #000000;
+	overflow: hidden;
+	width: 100%;
+}
+
+.videoElement {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	pointer-events: none;
+}
+
+.studioFooter {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 12px 16px;
+	background: rgba(0, 0, 0, 0.35);
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	gap: 12px;
+}
+
+.aspectRatios {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	background: rgba(255, 255, 255, 0.06);
+	padding: 3px;
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.aspectButton {
+	padding: 4px 10px;
+	font-size: 12px;
+	font-weight: 500;
+	border-radius: 8px;
+	color: #a1a1aa;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.aspectButton:hover {
+	color: #ffffff;
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.aspectButtonActive {
+	color: #ffffff;
+	background: rgba(255, 255, 255, 0.18);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.audioMeterWrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 10px;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.audioMeterBar {
+	width: 60px;
+	height: 6px;
+	background: rgba(255, 255, 255, 0.12);
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.audioMeterFill {
+	height: 100%;
+	border-radius: 3px;
+	transition: width 0.08s ease-out;
+}

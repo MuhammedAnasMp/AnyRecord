@@ -1,0 +1,130 @@
+// @see - https://www.electron.build/configuration/configuration
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "dev.anyrecord.app",
+  "electronUpdaterCompatibility": ">=2.16",
+  "asar": true,
+  "asarUnpack": [
+    "node_modules/ffmpeg-static/**",
+    "node_modules/ffprobe-static/**",
+    "node_modules/uiohook-napi/**",
+    "electron/native/bin/**"
+  ],
+  "productName": "AnyRecord",
+  "protocols": [
+    {
+      "name": "AnyRecord authentication",
+      "schemes": ["anyrecord"]
+    }
+  ],
+  "npmRebuild": true,
+  "buildDependenciesFromSource": true,
+  "compression": "normal",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist",
+    "!dist/wallpapers/**",
+    "dist-electron",
+    "electron/native/bin",
+    "!electron/native/bin/**/whisper-bench*",
+    "!electron/native/bin/**/whisper-quantize*",
+    "!electron/native/bin/**/whisper-server*",
+    "!electron/native/bin/**/whisper-vad-speech-segments*",
+    "!node_modules/ffprobe-static/bin/darwin/**",
+    "!node_modules/ffprobe-static/bin/linux/**",
+    "!node_modules/ffprobe-static/bin/win32/ia32/**",
+    "!electron/native/**/build/**",
+    "!*.png",
+    "!preview*.png",
+    "!*.md",
+    "!README.md",
+    "!CONTRIBUTING.md",
+    "!LICENSE"
+  ],
+  "extraResources": [
+    {
+      "from": "public/wallpapers",
+      "to": "assets/wallpapers"
+    }
+  ],
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "MuhammedAnasMp",
+      "repo": "AnyRecord",
+      "tagNamePrefix": "v",
+      "publishAutoUpdate": true
+    }
+  ],
+
+  "mac": {
+    "hardenedRuntime": true,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "icons/icons/mac/icon.icns",
+    "artifactName": "${productName}-${arch}.${ext}",
+    "extendInfo": {
+      "NSAudioCaptureUsageDescription": "AnyRecord needs audio capture permission to record system audio.",
+      "NSCameraUsageDescription": "AnyRecord needs camera access to record webcam video.",
+      "NSMicrophoneUsageDescription": "AnyRecord needs microphone access to record voice audio.",
+      "NSCameraUseContinuityCameraDeviceType": true,
+      "com.apple.security.device.audio-input": true,
+      "CFBundleDocumentTypes": [
+        {
+          "CFBundleTypeName": "AnyRecord Project",
+          "CFBundleTypeRole": "Editor",
+          "CFBundleTypeExtensions": ["anyrecord"],
+          "CFBundleTypeIconFile": "icon.icns",
+          "LSHandlerRank": "Owner",
+          "LSItemContentTypes": ["dev.anyrecord.app.project"]
+        }
+      ],
+      "UTExportedTypeDeclarations": [
+        {
+          "UTTypeIdentifier": "dev.anyrecord.app.project",
+          "UTTypeDescription": "AnyRecord Project",
+          "UTTypeConformsTo": ["public.json"],
+          "UTTypeTagSpecification": {
+            "public.filename-extension": ["anyrecord"],
+            "public.mime-type": "application/x-anyrecord-project"
+          }
+        }
+      ]
+    }
+  },
+  "linux": {
+    "target": [
+      "AppImage"
+    ],
+    "icon": "icons/icons/png",
+    "artifactName": "${productName}-linux-x64.${ext}",
+    "category": "AudioVideo"
+  },
+  "win": {
+    "target": [
+      "nsis"
+    ],
+    "icon": "icons/icons/win/icon.ico",
+    "executableName": "AnyRecord",
+    "artifactName": "${productName}-windows-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "AnyRecord"
+  }
+}

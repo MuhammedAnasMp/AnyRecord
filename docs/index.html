@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnyRecord — Studio-Grade Screen Recordings</title>
+  <meta name="description"
+    content="The free, open-source screen recorder and video editor with smart auto-zoom, cursor polish, 3D studio lighting, and beautiful presentation frames. Built by Muhammed Anas & anydm.in." />
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="AnyRecord — Studio-Grade Screen Recordings" />
+  <meta property="og:description"
+    content="Open-source alternative to Screen Studio. Auto-zoom, cursor smoothing, 3D studio lighting, and 4K framing." />
+  <meta property="og:image" content="./assets/logo.png" />
+  <meta name="theme-color" content="#000000" />
+
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/logo.png" />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            apple: {
+              bg: '#000000',
+              elevated: '#0d0d0f',
+              card: '#141417',
+              border: 'rgba(255, 255, 255, 0.08)',
+              blue: '#0071e3',
+              blueHover: '#0077ed',
+              text: '#f5f5f7',
+              muted: '#86868b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #000000;
+      color: #f5f5f7;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Apple-style Frosted Glass Navigation */
+    .apple-nav {
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Bento Card Styling with Subtle Specular Border */
+    .bento-card {
+      background: linear-gradient(180deg, rgba(28, 28, 32, 0.65) 0%, rgba(18, 18, 20, 0.85) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+      box-shadow: 0 25px 50px -12px rgba(0, 113, 227, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+    }
+
+    /* Apple Typography Gradients */
+    .apple-headline {
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .text-gradient-silver {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 45%, #86868b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .text-gradient-blue {
+      background: linear-gradient(135deg, #5ac8fa 0%, #0071e3 55%, #5e5ce6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Ambient Studio Backlight */
+    .ambient-glow {
+      position: absolute;
+      width: 900px;
+      height: 450px;
+      background: radial-gradient(ellipse at center, rgba(0, 113, 227, 0.22), rgba(94, 92, 230, 0.1), transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Segmented Control Active State */
+    .segment-btn {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .segment-active {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    /* Subtle Grid Background */
+    .bg-grid {
+      background-size: 48px 48px;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen selection:bg-apple-blue selection:text-white font-sans">
+
+  <!-- TOP RIBBON: APPLE-STYLE ANNOUNCEMENT -->
+  <div
+    class="bg-[#111113] text-[#a1a1a6] text-[12px] py-2 px-4 text-center border-b border-white/[0.06] flex items-center justify-center gap-2 tracking-tight">
+    <span
+      class="px-1.5 py-0.5 rounded bg-apple-blue/20 text-[#47a1ff] text-[10px] font-semibold uppercase tracking-wider">Open
+      Source Initiative</span>
+    <span>Engineered & presented by <a href="https://anydm.in" target="_blank" rel="noopener noreferrer"
+        class="text-white font-medium hover:underline">anydm.in</a> — Redefining Digital Experiences</span>
+    <a href="https://anydm.in" target="_blank" rel="noopener noreferrer"
+      class="text-[#2997ff] hover:underline inline-flex items-center">Learn more <span class="ml-0.5">›</span></a>
+  </div>
+
+  <!-- STICKY GLOBAL NAVIGATION -->
+  <nav class="sticky top-0 z-50 apple-nav transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <img src="./assets/logo.png" alt="AnyRecord Logo"
+          class="w-7 h-7 rounded-lg shadow-sm group-hover:scale-105 transition-transform duration-300" />
+        <span class="font-semibold text-[15px] tracking-tight text-white flex items-center gap-2">
+          AnyRecord
+          <span
+            class="text-[10px] font-medium px-1.5 py-0.2 rounded-full bg-white/[0.08] text-apple-muted border border-white/[0.08]">1.4</span>
+        </span>
+      </a>
+
+      <!-- Center Navigation Links (Apple Style) -->
+      <div class="hidden md:flex items-center gap-8 text-[12px] font-normal text-[#d2d2d7] tracking-tight">
+        <a href="#features" class="hover:text-white transition-colors">Overview</a>
+        <a href="#media-gallery" class="hover:text-white transition-colors">Studio Showcase</a>
+        <a href="#comparison" class="hover:text-white transition-colors">Compare</a>
+        <a href="#anydm" class="hover:text-white transition-colors flex items-center gap-1">
+          <span>anydm.in</span>
+        </a>
+        <a href="https://github.com/MuhammedAnasMp/AnyRecord" target="_blank" rel="noopener noreferrer"
+          class="hover:text-white transition-colors flex items-center gap-1">
+          <span>GitHub</span>
+          <svg class="w-3 h-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Right Action CTA -->
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/MuhammedAnasMp/AnyRecord" target="_blank" rel="noopener noreferrer"
+          class="hidden sm:inline-flex items-center gap-1.5 text-[12px] text-[#d2d2d7] hover:text-white px-3 py-1.5 rounded-full hover:bg-white/[0.06] transition-all">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          <span>Star</span>
+        </a>
+        <a href="#download"
+          class="bg-apple-blue hover:bg-apple-blueHover text-white text-[12px] font-medium px-3.5 py-1.5 rounded-full transition-all shadow-sm active:scale-95">
+          Download
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="relative pt-20 pb-28 sm:pt-28 sm:pb-36 overflow-hidden bg-grid">
+    <div class="ambient-glow -top-24 left-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+
+      <!-- Eyebrow Pill -->
+      <div
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-[12px] text-[#d2d2d7] font-medium mb-8 backdrop-blur-md">
+        <span class="flex h-2 w-2 rounded-full bg-[#30d158]"></span>
+        <span>Open-Source Screen Studio Alternative</span>
+        <span class="text-white/20">|</span>
+        <span class="text-[#2997ff]">100% Free & Offline</span>
+      </div>
+
+      <!-- Display Headline -->
+      <h1 class="apple-headline text-5xl sm:text-7xl lg:text-[80px] font-bold tracking-tight max-w-4xl mx-auto">
+        <span class="text-gradient-silver">Screen recordings.</span><br />
+        <span class="text-gradient-blue">Directed by physics.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p
+        class="mt-6 text-lg sm:text-[21px] text-apple-muted max-w-2xl mx-auto font-normal leading-relaxed tracking-tight">
+        Intelligent spring-physics zoom, silky cursor smoothing, 3D monocular depth lighting, and 4K presentation
+        framing. Built for creators, free forever.
+      </p>
+
+      <!-- Apple-style Dual CTA -->
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a id="hero-download-btn"
+          href="https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-windows-x64.exe"
+          class="w-full sm:w-auto bg-white text-black hover:bg-gray-100 font-semibold text-[15px] px-7 py-3.5 rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span id="hero-download-label">Download for Windows</span>
+        </a>
+        <a href="https://github.com/MuhammedAnasMp/AnyRecord" target="_blank" rel="noopener noreferrer"
+          class="w-full sm:w-auto bg-white/[0.07] hover:bg-white/[0.12] text-white font-medium text-[15px] px-7 py-3.5 rounded-full border border-white/[0.12] transition-all flex items-center justify-center gap-2 backdrop-blur-md">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+          </svg>
+          <span>View Source on GitHub</span>
+        </a>
+      </div>
+
+      <!-- OS Hint detected automatically -->
+      <p id="hero-os-hint" class="mt-3 text-[12px] text-apple-muted">
+        Windows 10/11 (64-bit) &bull; <a href="#download" class="text-[#2997ff] hover:underline">Download for macOS or
+          Linux</a>
+      </p>
+
+      <!-- Minimal Spec Strip -->
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[12px] text-apple-muted">
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span> AGPL-3.0 License
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span> Zero Watermarks
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span> 100% Local Processing
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span> macOS • Windows • Linux
+        </span>
+      </div>
+
+      <!-- Studio Display Mockup Frame -->
+      <div class="mt-16 max-w-5xl mx-auto relative">
+        <!-- Backlight Aura -->
+        <div
+          class="absolute -inset-4 bg-gradient-to-tr from-[#0071e3]/25 via-[#5e5ce6]/20 to-[#30d158]/15 rounded-[32px] blur-3xl opacity-70 pointer-events-none">
+        </div>
+
+        <div class="relative rounded-[24px] p-2 bg-gradient-to-b from-white/[0.15] to-white/[0.04] shadow-2xl">
+          <div class="rounded-[18px] overflow-hidden bg-[#0a0a0c] border border-black">
+            <!-- macOS Window Chrome -->
+            <div class="bg-[#161618] px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[#ff5f56] border border-black/20"></span>
+                <span class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/20"></span>
+                <span class="w-3 h-3 rounded-full bg-[#27c93f] border border-black/20"></span>
+              </div>
+              <div
+                class="flex items-center gap-2 px-3 py-1 rounded-md bg-black/40 border border-white/[0.05] text-[11px] text-apple-muted font-mono">
+                <span class="w-2 h-2 rounded-full bg-[#ff453a] animate-pulse"></span>
+                <span>AnyRecord Studio — 4K 60fps</span>
+              </div>
+              <div class="text-[11px] font-medium text-[#2997ff]">ProRes / MP4</div>
+            </div>
+
+            <!-- Video / GIF Canvas -->
+            <div class="relative bg-black aspect-video flex items-center justify-center overflow-hidden">
+              <img src="./media/feature1.gif" alt="AnyRecord in Action" class="w-full h-full object-cover" />
+
+              <!-- Floating HUD Pill -->
+              <div
+                class="absolute bottom-5 left-5 bg-black/75 backdrop-blur-xl px-3.5 py-2 rounded-full text-[12px] font-medium text-white flex items-center gap-2.5 border border-white/[0.12] shadow-lg">
+                <span class="h-2 w-2 rounded-full bg-[#30d158]"></span>
+                <span>Spring Auto-Zoom Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BENTO GRID FEATURES (APPLE STYLE) -->
+  <section id="features" class="py-28 relative border-t border-white/[0.06] bg-[#050507]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <!-- Section Header -->
+      <div class="max-w-3xl mb-16">
+        <p class="text-[13px] font-semibold text-[#2997ff] uppercase tracking-widest mb-3">Pro Capabilities</p>
+        <h2 class="apple-headline text-4xl sm:text-5xl font-bold text-white">
+          A full post-production studio.<br />
+          <span class="text-apple-muted">Automated in real time.</span>
+        </h2>
+      </div>
+
+      <!-- 12-Column Bento Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+
+        <!-- Bento 1: Smart Auto-Zoom (7 cols) -->
+        <div
+          class="md:col-span-7 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden group">
+          <div class="relative z-10">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0071e3]/15 border border-[#0071e3]/30 text-[#47a1ff] text-[11px] font-semibold mb-6">
+              <span>Intelligent Camera</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">Smart Auto-Zoom</h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed max-w-md">
+              Tracks every click and keystroke automatically. Applies customizable spring physics, tension, and friction
+              curves so your camera glides like a professional motion designer animated it.
+            </p>
+          </div>
+
+          <!-- Visual Micro-UI -->
+          <div
+            class="mt-8 pt-6 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-4 text-[12px] font-mono text-[#a1a1a6]">
+            <span class="px-3 py-1.5 rounded-lg bg-black/50 border border-white/[0.06]">Tension: <strong
+                class="text-white">210</strong></span>
+            <span class="px-3 py-1.5 rounded-lg bg-black/50 border border-white/[0.06]">Friction: <strong
+                class="text-white">24</strong></span>
+            <span class="px-3 py-1.5 rounded-lg bg-black/50 border border-white/[0.06]">Zoom Scale: <strong
+                class="text-[#30d158]">2.2x</strong></span>
+          </div>
+        </div>
+
+        <!-- Bento 2: Cursor Physics (5 cols) -->
+        <div
+          class="md:col-span-5 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-[11px] font-semibold mb-6">
+              <span>Motion Polish</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">Cursor Physics & Sway</h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed">
+              Eliminates shaky hand movements. Replaces raw OS pointers with high-DPI vector cursors, directional sway
+              inertia, motion blur, and tactile click ripples.
+            </p>
+          </div>
+          <div class="mt-8 flex items-center gap-3 text-[12px] text-cyan-400 font-medium">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span>120Hz sub-pixel interpolation</span>
+          </div>
+        </div>
+
+        <!-- Bento 3: Depthbake 3D Lighting (5 cols) -->
+        <div
+          class="md:col-span-5 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[11px] font-semibold mb-6">
+              <span>Exclusive Technology</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">Depthbake 3D Lighting</h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed">
+              Powered by monocular depth estimation. Casts virtual 3D studio key lights, rim highlights, and ambient
+              shadows across your footage for unmatched depth.
+            </p>
+          </div>
+          <div class="mt-8 flex items-center gap-3 text-[12px] text-amber-400 font-medium">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span>Real-time Z-depth normal mapping</span>
+          </div>
+        </div>
+
+        <!-- Bento 4: Offline Whisper AI Captions (7 cols) -->
+        <div
+          class="md:col-span-7 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#30d158]/15 border border-[#30d158]/30 text-[#30d158] text-[11px] font-semibold mb-6">
+              <span>On-Device Neural Engine</span>
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-3">Offline AI Captions via Whisper
+            </h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed max-w-lg">
+              Generate dynamic word-by-word karaoke subtitles locally using OpenAI’s Whisper model. Zero cloud uploads,
+              zero API costs, complete privacy.
+            </p>
+          </div>
+          <div
+            class="mt-8 p-3.5 rounded-xl bg-black/50 border border-white/[0.06] flex items-center justify-center gap-2 text-sm font-semibold">
+            <span class="text-white/50">“Create</span>
+            <span class="px-2 py-0.5 rounded bg-[#30d158] text-black">studio-grade</span>
+            <span class="text-white/50">videos in minutes.”</span>
+          </div>
+        </div>
+
+        <!-- Bento 5: Presentation Framing (6 cols) -->
+        <div class="md:col-span-6 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-400 text-[11px] font-semibold mb-5">
+              <span>4K Canvas</span>
+            </div>
+            <h3 class="text-2xl font-bold text-white tracking-tight mb-2">Presentation Framing</h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed">
+              Wrap recordings inside curated macOS wallpapers, mesh gradients, frosted glass padding, squircle corner
+              radii, and deep elevation shadows.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bento 6: Non-Destructive Timeline (6 cols) -->
+        <div class="md:col-span-6 bento-card rounded-[28px] p-8 sm:p-10 flex flex-col justify-between">
+          <div>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[11px] font-semibold mb-5">
+              <span>Precision Editing</span>
+            </div>
+            <h3 class="text-2xl font-bold text-white tracking-tight mb-2">Multi-Track Timeline & Speed Ramps</h3>
+            <p class="text-[15px] text-apple-muted leading-relaxed">
+              Non-destructive split cuts, ripple deletions, per-segment speed ramping (up to 4x), and independent
+              microphone & system audio track mixing.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE STUDIO SHOWCASE (APPLE SEGMENTED TABS) -->
+  <section id="media-gallery" class="py-28 relative border-t border-white/[0.06]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <p class="text-[13px] font-semibold text-[#2997ff] uppercase tracking-widest mb-3">Interactive Demo</p>
+        <h2 class="apple-headline text-4xl sm:text-5xl font-bold text-white">See the workflow in motion.</h2>
+        <p class="mt-4 text-apple-muted text-[17px]">Explore real captures rendered directly from AnyRecord’s engine.
+        </p>
+      </div>
+
+      <!-- Apple Segmented Control Pill Bar -->
+      <div class="flex justify-center mb-12">
+        <div class="inline-flex flex-wrap justify-center p-1.5 rounded-full bg-[#161618] border border-white/[0.08]"
+          id="media-tabs">
+          <button onclick="switchTab('zoom')" id="tab-zoom"
+            class="segment-btn segment-active px-5 py-2 rounded-full text-[13px] font-medium">
+            Auto-Zoom & Track
+          </button>
+          <button onclick="switchTab('cursor')" id="tab-cursor"
+            class="segment-btn px-5 py-2 rounded-full text-[13px] font-medium text-apple-muted hover:text-white">
+            Cursor Physics
+          </button>
+          <button onclick="switchTab('editor')" id="tab-editor"
+            class="segment-btn px-5 py-2 rounded-full text-[13px] font-medium text-apple-muted hover:text-white">
+            Studio Timeline UI
+          </button>
+          <button onclick="switchTab('custom')" id="tab-custom"
+            class="segment-btn px-5 py-2 rounded-full text-[13px] font-medium text-[#2997ff] hover:text-white">
+            + Custom Media
+          </button>
+        </div>
+      </div>
+
+      <!-- Showcase Stage -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Primary Viewer (8 cols) -->
+        <div class="lg:col-span-8 bento-card rounded-[24px] overflow-hidden p-2">
+          <div class="rounded-[18px] overflow-hidden bg-black border border-white/[0.06]">
+            <div
+              class="bg-[#121214] px-4 py-3 border-b border-white/[0.06] flex items-center justify-between text-[12px]">
+              <span id="media-title" class="text-white font-medium">Auto-Zoom & Focus Demonstration</span>
+              <span class="text-apple-muted font-mono text-[11px]">60 FPS Preview</span>
+            </div>
+
+            <div class="relative bg-black aspect-video flex items-center justify-center">
+              <img id="media-img" src="./media/feature1.gif" alt="AnyRecord Feature Demo"
+                class="w-full h-full object-contain" />
+            </div>
+
+            <div class="p-5 bg-[#121214] border-t border-white/[0.06]">
+              <p id="media-desc" class="text-[14px] text-apple-muted leading-relaxed">
+                AnyRecord automatically tracks cursor movements and clicks to smoothly zoom in on interactive elements
+                with spring physics.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inspector Sidebar (4 cols) -->
+        <div class="lg:col-span-4 space-y-4">
+
+          <!-- Playlist Selector -->
+          <div class="bento-card rounded-[24px] p-6 space-y-3">
+            <h4 class="text-[11px] font-semibold uppercase tracking-wider text-apple-muted mb-2">Included Demos</h4>
+
+            <div onclick="switchTab('zoom')"
+              class="cursor-pointer p-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all flex items-center gap-3.5">
+              <img src="./media/feature1.gif" class="w-14 h-10 object-cover rounded-lg border border-white/10"
+                alt="Zoom" />
+              <div>
+                <p class="text-[13px] font-semibold text-white">Smart Zoom & Click</p>
+                <p class="text-[11px] text-apple-muted font-mono">docs/media/feature1.gif</p>
+              </div>
+            </div>
+
+            <div onclick="switchTab('cursor')"
+              class="cursor-pointer p-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all flex items-center gap-3.5">
+              <img src="./media/CursorSwayDemo.gif" class="w-14 h-10 object-cover rounded-lg border border-white/10"
+                alt="Cursor" />
+              <div>
+                <p class="text-[13px] font-semibold text-white">Cursor Sway & Physics</p>
+                <p class="text-[11px] text-apple-muted font-mono">docs/media/CursorSwayDemo.gif</p>
+              </div>
+            </div>
+
+            <div onclick="switchTab('editor')"
+              class="cursor-pointer p-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-all flex items-center gap-3.5">
+              <img src="./pr/project-browser/projects.png"
+                class="w-14 h-10 object-cover rounded-lg border border-white/10" alt="Editor" />
+              <div>
+                <p class="text-[13px] font-semibold text-white">Studio Timeline UI</p>
+                <p class="text-[11px] text-apple-muted font-mono">docs/pr/.../projects.png</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Developer Note Card -->
+          <div class="bento-card rounded-[24px] p-6 border border-[#0071e3]/30">
+            <div class="flex items-center gap-2 mb-2 text-[#47a1ff]">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h4 class="font-semibold text-[13px] text-white">Add Your Own Captures</h4>
+            </div>
+            <p class="text-[12px] text-apple-muted leading-relaxed">
+              Drop any MP4 or GIF into <code
+                class="text-white bg-white/10 px-1.5 py-0.5 rounded font-mono">docs/media/</code> and commit to GitHub
+              Pages for instant live previews.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLE-STYLE SPEC COMPARISON TABLE -->
+  <section id="comparison" class="py-28 relative border-t border-white/[0.06] bg-[#050507]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+      <div class="text-center mb-16">
+        <p class="text-[13px] font-semibold text-[#2997ff] uppercase tracking-widest mb-3">Compare</p>
+        <h2 class="apple-headline text-4xl sm:text-5xl font-bold text-white">Why creators switch.</h2>
+        <p class="mt-4 text-apple-muted text-[17px]">Studio-grade output without recurring subscriptions or OS lock-in.
+        </p>
+      </div>
+
+      <div class="bento-card rounded-[28px] overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="border-b border-white/[0.08] text-[12px] uppercase tracking-wider text-apple-muted bg-white/[0.02]">
+                <th class="py-5 px-6 font-semibold">Feature</th>
+                <th class="py-5 px-6 font-bold text-white bg-[#0071e3]/15 border-x border-[#0071e3]/25">AnyRecord</th>
+                <th class="py-5 px-6 font-semibold">Screen Studio</th>
+                <th class="py-5 px-6 font-semibold">OBS / QuickTime</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.06] text-[14px]">
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">License & Pricing</td>
+                <td class="py-5 px-6 font-semibold text-[#30d158] bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">100%
+                  Free & Open Source</td>
+                <td class="py-5 px-6 text-apple-muted">$89 – $229+ Paid</td>
+                <td class="py-5 px-6 text-apple-muted">Free</td>
+              </tr>
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">Spring Physics Auto-Zoom</td>
+                <td class="py-5 px-6 font-semibold text-white bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">✓
+                  Included</td>
+                <td class="py-5 px-6 text-white">✓ Included</td>
+                <td class="py-5 px-6 text-apple-muted">✕ Manual Keyframes</td>
+              </tr>
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">3D Virtual Studio Lighting</td>
+                <td class="py-5 px-6 font-semibold text-[#47a1ff] bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">✓
+                  Depthbake 3D</td>
+                <td class="py-5 px-6 text-apple-muted">✕ Not Available</td>
+                <td class="py-5 px-6 text-apple-muted">✕ Not Available</td>
+              </tr>
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">Supported Platforms</td>
+                <td class="py-5 px-6 font-semibold text-white bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">macOS,
+                  Windows, Linux</td>
+                <td class="py-5 px-6 text-apple-muted">macOS Only</td>
+                <td class="py-5 px-6 text-apple-muted">macOS, Windows, Linux</td>
+              </tr>
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">Offline Whisper AI Captions</td>
+                <td class="py-5 px-6 font-semibold text-white bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">✓ 100%
+                  Local</td>
+                <td class="py-5 px-6 text-white">✓ Included</td>
+                <td class="py-5 px-6 text-apple-muted">✕ Not Available</td>
+              </tr>
+              <tr>
+                <td class="py-5 px-6 text-white font-medium">Privacy & Telemetry</td>
+                <td class="py-5 px-6 font-semibold text-[#30d158] bg-[#0071e3]/[0.07] border-x border-[#0071e3]/20">✓
+                  Offline-First, No Tracking</td>
+                <td class="py-5 px-6 text-apple-muted">Cloud License Checks</td>
+                <td class="py-5 px-6 text-white">✓ Offline-First</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMPANY SPOTLIGHT: anydm.in -->
+  <section id="anydm" class="py-28 relative border-t border-white/[0.06] overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+
+      <div class="bento-card rounded-[32px] p-8 sm:p-14 relative overflow-hidden">
+        <!-- Subtle Radial Glow Inside Card -->
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-[#0071e3]/20 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+
+          <div class="lg:col-span-8 space-y-5">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-[11px] font-semibold text-[#d2d2d7] uppercase tracking-wider">
+              <span>Engineering & Vision</span>
+            </div>
+
+            <h2 class="apple-headline text-3xl sm:text-5xl font-bold text-white">
+              Crafted by <span class="text-gradient-blue">anydm.in</span>
+            </h2>
+
+            <p class="text-[#d2d2d7] text-[16px] leading-relaxed max-w-2xl">
+              <strong>anydm.in</strong> is a technology and digital product studio led by <strong>Muhammed
+                Anas</strong>. We design and engineer high-performance software, developer tools, and open-source
+              ecosystems built to elevate modern creators.
+            </p>
+
+            <p class="text-apple-muted text-[14px] leading-relaxed max-w-2xl">
+              AnyRecord embodies our belief that professional creative tools should be accessible to everyone—free from
+              paywalls, watermarks, or restrictive licensing.
+            </p>
+
+            <div class="pt-3 flex flex-wrap items-center gap-4">
+              <a href="https://anydm.in" target="_blank" rel="noopener noreferrer"
+                class="bg-apple-blue hover:bg-apple-blueHover text-white font-medium text-[14px] px-6 py-3 rounded-full transition-all flex items-center gap-2 shadow-md">
+                <span>Explore anydm.in</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+              <a href="https://github.com/MuhammedAnasMp" target="_blank" rel="noopener noreferrer"
+                class="bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium text-[14px] px-6 py-3 rounded-full border border-white/[0.1] transition-all">
+                <span>@MuhammedAnasMp</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Minimalist Monolith Emblem -->
+          <div class="lg:col-span-4 flex items-center justify-center">
+            <div class="w-52 h-52 rounded-[36px] bg-gradient-to-b from-white/[0.15] to-white/[0.03] p-[1px] shadow-2xl">
+              <div
+                class="w-full h-full bg-[#0a0a0c] rounded-[35px] flex flex-col items-center justify-center p-6 text-center">
+                <span class="text-3xl font-extrabold tracking-tighter text-white">ANYDM</span>
+                <span class="text-[11px] font-mono text-[#2997ff] tracking-widest mt-1">.IN</span>
+                <div class="mt-5 pt-4 border-t border-white/[0.08] text-[11px] text-apple-muted leading-tight">
+                  Digital Engineering &<br />Open-Source Studio
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DOWNLOAD SECTION -->
+  <section id="download" class="py-28 relative border-t border-white/[0.06] bg-[#050507]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <p class="text-[13px] font-semibold text-[#2997ff] uppercase tracking-widest mb-3">Get Started</p>
+        <h2 class="apple-headline text-4xl sm:text-5xl font-bold text-white">Download AnyRecord.</h2>
+        <p class="mt-4 text-apple-muted text-[17px]">Native performance across macOS, Windows, and Linux.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+        <!-- macOS -->
+        <div class="bento-card rounded-[28px] p-8 flex flex-col justify-between relative border-[#0071e3]/40">
+          <div
+            class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-[#0071e3]/20 border border-[#0071e3]/40 text-[10px] font-semibold text-[#47a1ff] uppercase tracking-wider">
+            Apple Silicon & Intel
+          </div>
+          <div>
+            <div
+              class="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-white mb-6">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.66-1.09 1.73-.95 2.76.99.08 2.05-.51 2.68-1.26z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-1">macOS</h3>
+            <p class="text-[12px] text-apple-muted mb-4">macOS 14.0 Sonoma or later</p>
+            <p class="text-[13px] text-[#d2d2d7] leading-relaxed">Powered by native ScreenCaptureKit & Metal hardware
+              acceleration.</p>
+          </div>
+          <div class="mt-8">
+            <a id="btn-download-mac"
+              href="https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-arm64.dmg"
+              class="w-full bg-white text-black hover:bg-gray-200 text-[13px] font-semibold py-3 px-4 rounded-full transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Download .DMG (Apple Silicon)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Windows -->
+        <div class="bento-card rounded-[28px] p-8 flex flex-col justify-between">
+          <div>
+            <div
+              class="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-[#47a1ff] mb-6">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-1">Windows</h3>
+            <p class="text-[12px] text-apple-muted mb-4">Windows 10 (19041+) & Windows 11</p>
+            <p class="text-[13px] text-[#d2d2d7] leading-relaxed">Windows Graphics Capture (WGC) API with WASAPI
+              loopback & CUDA support.</p>
+          </div>
+          <div class="mt-8">
+            <a id="btn-download-win"
+              href="https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-windows-x64.exe"
+              class="w-full bg-apple-blue hover:bg-apple-blueHover text-white text-[13px] font-semibold py-3 px-4 rounded-full transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Download .EXE (Windows x64)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Linux -->
+        <div class="bento-card rounded-[28px] p-8 flex flex-col justify-between">
+          <div>
+            <div
+              class="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-amber-400 mb-6">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.002 0c-4.42 0-8 3.582-8 8.002 0 2.21.896 4.21 2.344 5.658-.33.85-.688 1.954-.688 3.34h12.688c0-1.386-.358-2.49-.688-3.34 1.448-1.448 2.344-3.448 2.344-5.658 0-4.42-3.58-8.002-8-8.002z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-1">Linux</h3>
+            <p class="text-[12px] text-apple-muted mb-4">Ubuntu, Fedora, Debian & Arch</p>
+            <p class="text-[13px] text-[#d2d2d7] leading-relaxed">PipeWire Wayland & X11 capture available as AppImage,
+              .deb, and AUR.</p>
+          </div>
+          <div class="mt-8">
+            <a id="btn-download-linux"
+              href="https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-linux-x64.AppImage"
+              class="w-full bg-white/[0.08] hover:bg-white/[0.14] text-white text-[13px] font-semibold py-3 px-4 rounded-full border border-white/[0.1] transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Download .AppImage (Linux x64)</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Terminal Build Box -->
+      <div class="mt-12 max-w-3xl mx-auto bento-card rounded-[24px] p-6">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
+            <span class="text-[12px] font-semibold text-white">Build from Source (Node.js 20+)</span>
+          </div>
+          <button onclick="copySourceCommands()" id="copy-btn"
+            class="text-[11px] font-medium px-3 py-1 rounded-full bg-white/[0.07] hover:bg-white/[0.14] text-[#d2d2d7] border border-white/[0.08] transition-all">
+            Copy Commands
+          </button>
+        </div>
+        <pre id="source-cmds"
+          class="bg-black/80 p-4 rounded-2xl font-mono text-[#47a1ff] overflow-x-auto text-[12px] leading-relaxed border border-white/[0.06]">git clone https://github.com/MuhammedAnasMp/AnyRecord.git
+cd AnyRecord
+npm install
+npm run dev</pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MINIMAL APPLE-STYLE FOOTER -->
+  <footer class="border-t border-white/[0.08] bg-black py-12 text-[12px] text-apple-muted">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-white/[0.06]">
+        <div class="flex items-center gap-3">
+          <img src="./assets/logo.png" alt="AnyRecord" class="w-6 h-6 rounded-md" />
+          <span class="font-semibold text-white">AnyRecord</span>
+          <span class="text-white/20">|</span>
+          <span>An Open-Source Initiative by <a href="https://anydm.in" target="_blank" rel="noopener noreferrer"
+              class="text-white hover:underline font-medium">anydm.in</a></span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <a href="https://github.com/MuhammedAnasMp/AnyRecord" class="hover:text-white transition-colors">GitHub</a>
+          <a href="https://github.com/MuhammedAnasMp/AnyRecord/releases"
+            class="hover:text-white transition-colors">Releases</a>
+          <a href="https://github.com/MuhammedAnasMp/AnyRecord/blob/main/LICENSE.md"
+            class="hover:text-white transition-colors">AGPL-3.0 License</a>
+          <a href="https://anydm.in" target="_blank" rel="noopener noreferrer"
+            class="text-[#2997ff] hover:underline font-medium">anydm.in</a>
+        </div>
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#6e6e73]">
+        <p>Copyright &copy; 2026 AnyRecord. Crafted by Muhammed Anas & anydm.in. Built on open-source foundations of
+          Recordly & OpenScreen.</p>
+        <p>100% Local-First • Zero Telemetry</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE SCRIPTS -->
+  <script>
+    const tabsData = {
+      zoom: {
+        title: "Smart Auto-Zoom & Click Tracking",
+        img: "./media/feature1.gif",
+        desc: "AnyRecord detects key cursor locations and click events, applying smooth, dynamic zooms with customizable spring physics."
+      },
+      cursor: {
+        title: "Cursor Smoothing, Sway & Physics",
+        img: "./media/CursorSwayDemo.gif",
+        desc: "Natural mouse motion smoothing with inertia sway, customizable click ripples, motion blur, and interchangeable SVG cursors."
+      },
+      editor: {
+        title: "Complete Video Editing Studio",
+        img: "./pr/project-browser/projects.png",
+        desc: "Integrated timeline editor supporting multi-track audio, clip trims, speed ramping, local Whisper AI captions, and presentation framing."
+      },
+      custom: {
+        title: "Your Custom Media Showcase Slot",
+        img: "./media/demo.gif",
+        desc: "Easily showcase your own recordings! Drop any MP4 or GIF into docs/media/ and link it here."
+      }
+    };
+
+    function switchTab(key) {
+      const data = tabsData[key];
+      if (!data) return;
+
+      document.getElementById('media-title').innerText = data.title;
+      document.getElementById('media-img').src = data.img;
+      document.getElementById('media-desc').innerText = data.desc;
+
+      document.querySelectorAll('.segment-btn').forEach(btn => {
+        btn.classList.remove('segment-active', 'text-white');
+        btn.classList.add('text-apple-muted');
+      });
+
+      const activeBtn = document.getElementById('tab-' + key);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-apple-muted');
+        activeBtn.classList.add('segment-active');
+      }
+    }
+
+
+    // Intelligent OS Detection & Automatic Download Routing
+    (function detectAndAdaptOS() {
+      const ua = navigator.userAgent || navigator.platform || '';
+      const heroBtn = document.getElementById('hero-download-btn');
+      const heroLabel = document.getElementById('hero-download-label');
+      const heroHint = document.getElementById('hero-os-hint');
+
+      const DOWNLOAD_TARGETS = {
+        mac: {
+          name: 'macOS',
+          badge: 'Apple Silicon (macOS 14+)',
+          url: 'https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-arm64.dmg'
+        },
+        win: {
+          name: 'Windows',
+          badge: 'Windows 10/11 (64-bit)',
+          url: 'https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-windows-x64.exe'
+        },
+        linux: {
+          name: 'Linux',
+          badge: 'AppImage (x64)',
+          url: 'https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-linux-x64.AppImage'
+        }
+      };
+
+      let os = DOWNLOAD_TARGETS.win;
+      if (/Macintosh|Mac OS X|iPhone|iPad/i.test(ua)) {
+        os = DOWNLOAD_TARGETS.mac;
+      } else if (/Linux/i.test(ua) && !/Android/i.test(ua)) {
+        os = DOWNLOAD_TARGETS.linux;
+      } else if (/Windows/i.test(ua)) {
+        os = DOWNLOAD_TARGETS.win;
+      }
+
+      if (heroBtn && heroLabel) {
+        heroBtn.href = os.url;
+        heroLabel.textContent = 'Download for ' + os.name;
+      }
+      if (heroHint) {
+        heroHint.innerHTML = os.badge + ' &bull; <a href="#download" class="text-[#2997ff] hover:underline">Download for other platforms</a>';
+      }
+    })();
+
+    function copySourceCommands() {
+      const cmds = document.getElementById('source-cmds').innerText;
+      navigator.clipboard.writeText(cmds).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.innerText = 'Copied ✓';
+        btn.classList.add('text-[#30d158]');
+        setTimeout(() => {
+          btn.innerText = 'Copy Commands';
+          btn.classList.remove('text-[#30d158]');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>

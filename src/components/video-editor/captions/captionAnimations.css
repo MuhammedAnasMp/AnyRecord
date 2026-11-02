@@ -1,0 +1,232 @@
+/* AnyRecord Dynamic Caption Animations */
+
+@keyframes captionFadeIn {
+	0% { opacity: 0; transform: translateY(6px); }
+	100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes captionPopIn {
+	0% { opacity: 0; transform: scale(0.65); }
+	70% { opacity: 1; transform: scale(1.1); }
+	100% { transform: scale(1); }
+}
+
+@keyframes captionLittlePop {
+	0% { opacity: 0; transform: scale(0.85); }
+	60% { opacity: 1; transform: scale(1.06); }
+	100% { transform: scale(1); }
+}
+
+@keyframes captionRiseIn {
+	0% { opacity: 0; transform: translateY(18px) scale(0.96); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes captionScaleIn {
+	0% { opacity: 0; transform: scale(0.4); }
+	100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes captionSlideUp {
+	0% { opacity: 0; transform: translateY(28px); }
+	100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes captionSlideDown {
+	0% { opacity: 0; transform: translateY(-28px); }
+	100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes captionSlideLeft {
+	0% { opacity: 0; transform: translateX(35px); }
+	100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes captionSlideRight {
+	0% { opacity: 0; transform: translateX(-35px); }
+	100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes captionBounceIn {
+	0% { opacity: 0; transform: translateY(-30px); }
+	60% { opacity: 1; transform: translateY(8px); }
+	80% { transform: translateY(-4px); }
+	100% { transform: translateY(0); }
+}
+
+/* Spark Shots */
+@keyframes captionSparkShots {
+	0% { transform: scale(0.7) rotate(-2deg); filter: brightness(1.8) drop-shadow(0 0 14px #ffe600); }
+	50% { transform: scale(1.12) rotate(1deg); filter: brightness(1.3) drop-shadow(0 0 8px #ff5722); }
+	100% { transform: scale(1) rotate(0deg); filter: brightness(1) drop-shadow(0 0 0px transparent); }
+}
+
+/* Crooked Error */
+@keyframes captionCrookedError {
+	0% { transform: skewX(-14deg) scale(0.9); filter: hue-rotate(90deg); }
+	25% { transform: skewX(10deg) translateY(-2px); filter: hue-rotate(180deg); }
+	50% { transform: skewX(-6deg) translateY(2px); filter: hue-rotate(270deg); }
+	75% { transform: skewX(3deg); }
+	100% { transform: skewX(0deg) scale(1); filter: hue-rotate(0deg); }
+}
+
+/* Paper Plane */
+@keyframes captionPaperPlane {
+	0% { opacity: 0; transform: translate(-40px, 20px) rotate(-12deg) scale(0.6); }
+	70% { opacity: 1; transform: translate(6px, -4px) rotate(3deg) scale(1.05); }
+	100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+/* Heart Cursor */
+@keyframes captionHeartCursor {
+	0% { transform: scale(0.85); filter: drop-shadow(0 0 18px #ff007f); }
+	50% { transform: scale(1.15); filter: drop-shadow(0 0 24px #ff007f); }
+	100% { transform: scale(1); filter: drop-shadow(0 0 6px #ff007f); }
+}
+
+/* Jittery Shine */
+@keyframes captionJitteryShine {
+	0% { transform: translateX(-1px) scale(0.98); background-position: -200% 0; }
+	25% { transform: translateX(2px); }
+	50% { transform: translateX(-2px) scale(1.02); }
+	75% { transform: translateX(1px); }
+	100% { transform: translateX(0) scale(1); background-position: 200% 0; }
+}
+
+/* Type Slide */
+@keyframes captionTypeSlide {
+	0% { opacity: 0; transform: translateX(-16px) scale(0.92); }
+	100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* Glitch Spark */
+@keyframes captionGlitchSpark {
+	0% { opacity: 0.8; transform: translate(-3px, 2px) skewX(-8deg); text-shadow: -3px 0 #ff0055, 3px 0 #00ffff; }
+	30% { transform: translate(3px, -2px) skewX(6deg); text-shadow: 3px 0 #ff0055, -3px 0 #00ffff; }
+	70% { transform: translate(-1px, 1px) skewX(-2deg); text-shadow: -1px 0 #ff0055, 1px 0 #00ffff; }
+	100% { opacity: 1; transform: translate(0, 0) skewX(0); text-shadow: none; }
+}
+
+/* Hot Flicker */
+@keyframes captionHotFlicker {
+	0% { opacity: 0.6; filter: brightness(1.6) drop-shadow(0 0 12px #ff4500); }
+	20% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 6px #ff8c00); }
+	40% { opacity: 0.7; filter: brightness(1.8) drop-shadow(0 0 16px #ffd700); }
+	70% { opacity: 1; filter: brightness(1.1) drop-shadow(0 0 4px #ff4500); }
+	100% { opacity: 1; filter: brightness(1); }
+}
+
+/* RGB Flex */
+@keyframes captionRgbFlex {
+	0% { transform: scale(0.9); text-shadow: -4px 0 #ff0055, 4px 0 #00f0ff; }
+	50% { transform: scale(1.08); text-shadow: 4px 0 #ff0055, -4px 0 #00f0ff; }
+	100% { transform: scale(1); text-shadow: -1px 0 #ff0055, 1px 0 #00f0ff; }
+}
+
+/* Neon Yellow */
+@keyframes captionNeonYellow {
+	0% { filter: drop-shadow(0 0 2px #ffe600) drop-shadow(0 0 6px #ffe600); transform: scale(0.95); }
+	50% { filter: drop-shadow(0 0 8px #ffe600) drop-shadow(0 0 18px #ffe600) drop-shadow(0 0 30px #ff9900); transform: scale(1.04); }
+	100% { filter: drop-shadow(0 0 4px #ffe600) drop-shadow(0 0 10px #ffe600); transform: scale(1); }
+}
+
+/* Quick Intro */
+@keyframes captionQuickIntro {
+	0% { opacity: 0; transform: scale(1.6); filter: blur(4px); }
+	70% { opacity: 1; transform: scale(0.95); filter: blur(0px); }
+	100% { transform: scale(1); }
+}
+
+/* Echoed Drop */
+@keyframes captionEchoedDrop {
+	0% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+	60% { opacity: 0.8; transform: translateY(6px) scale(0.98); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Cut Echoes */
+@keyframes captionCutEchoes {
+	0% { transform: translateX(-15px); opacity: 0.4; filter: blur(2px); }
+	50% { transform: translateX(5px); opacity: 0.9; filter: blur(0px); }
+	100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Stretch Down */
+@keyframes captionStretchDown {
+	0% { opacity: 0; transform: scaleY(2.2) scaleX(0.7) translateY(-20px); }
+	65% { opacity: 1; transform: scaleY(0.9) scaleX(1.1) translateY(4px); }
+	100% { transform: scaleY(1) scaleX(1) translateY(0); }
+}
+
+/* Blue Circle */
+@keyframes captionBlueCircle {
+	0% { transform: scale(0.75); filter: drop-shadow(0 0 20px #0088ff); }
+	50% { transform: scale(1.08); filter: drop-shadow(0 0 30px #00f0ff); }
+	100% { transform: scale(1); filter: drop-shadow(0 0 8px #0088ff); }
+}
+
+/* Un-Halved */
+@keyframes captionUnHalved {
+	0% { opacity: 0; transform: scaleY(0.2) scaleX(1.2); }
+	70% { opacity: 1; transform: scaleY(1.1) scaleX(0.95); }
+	100% { transform: scaleY(1) scaleX(1); }
+}
+
+/* Standard Emphasis Animations */
+@keyframes captionPulse {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.08); }
+}
+
+@keyframes captionShake {
+	0%, 100% { transform: translateX(0); }
+	20%, 60% { transform: translateX(-4px); }
+	40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes captionJitter {
+	0%, 100% { transform: translate(0, 0); }
+	25% { transform: translate(-2px, 2px); }
+	50% { transform: translate(2px, -2px); }
+	75% { transform: translate(-1px, -1px); }
+}
+
+@keyframes captionGlow {
+	0%, 100% { filter: drop-shadow(0 0 4px currentColor); }
+	50% { filter: drop-shadow(0 0 16px currentColor) drop-shadow(0 0 28px currentColor); }
+}
+
+@keyframes captionFlash {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.3; }
+}
+
+@keyframes captionColorChange {
+	0% { filter: hue-rotate(0deg); }
+	100% { filter: hue-rotate(360deg); }
+}
+
+/* Utility classes for preview in editor */
+.anim-preview-sparkShots { animation: captionSparkShots 0.8s ease infinite alternate; }
+.anim-preview-crookedError { animation: captionCrookedError 0.7s ease infinite alternate; }
+.anim-preview-paperPlane { animation: captionPaperPlane 0.9s ease infinite alternate; }
+.anim-preview-heartCursor { animation: captionHeartCursor 0.8s ease infinite alternate; }
+.anim-preview-jitteryShine { animation: captionJitteryShine 0.8s ease infinite alternate; }
+.anim-preview-typeSlide { animation: captionTypeSlide 0.8s ease infinite alternate; }
+.anim-preview-glitchSpark { animation: captionGlitchSpark 0.6s ease infinite alternate; }
+.anim-preview-hotFlicker { animation: captionHotFlicker 0.7s ease infinite alternate; }
+.anim-preview-rgbFlex { animation: captionRgbFlex 0.8s ease infinite alternate; }
+.anim-preview-neonYellow { animation: captionNeonYellow 0.9s ease infinite alternate; }
+.anim-preview-quickIntro { animation: captionQuickIntro 0.8s ease infinite alternate; }
+.anim-preview-echoedDrop { animation: captionEchoedDrop 0.8s ease infinite alternate; }
+.anim-preview-cutEchoes { animation: captionCutEchoes 0.8s ease infinite alternate; }
+.anim-preview-stretchDown { animation: captionStretchDown 0.8s ease infinite alternate; }
+.anim-preview-blueCircle { animation: captionBlueCircle 0.8s ease infinite alternate; }
+.anim-preview-unHalved { animation: captionUnHalved 0.8s ease infinite alternate; }
+.anim-preview-littlePop { animation: captionLittlePop 0.8s ease infinite alternate; }
+.anim-preview-pop { animation: captionPopIn 0.8s ease infinite alternate; }
+.anim-preview-fade { animation: captionFadeIn 0.8s ease infinite alternate; }
+.anim-preview-bounce { animation: captionBounceIn 0.8s ease infinite alternate; }
+.anim-preview-pulse { animation: captionPulse 0.8s ease infinite alternate; }
+.anim-preview-shake { animation: captionShake 0.6s ease infinite alternate; }
+.anim-preview-glow { animation: captionGlow 0.8s ease infinite alternate; }

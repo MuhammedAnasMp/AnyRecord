@@ -52,7 +52,7 @@
   "publish": [
     {
       "provider": "github",
-      "owner": "MuhammedAnasMp",
+      "owner": "anastoyou",
       "repo": "AnyRecord",
       "tagNamePrefix": "v",
       "publishAutoUpdate": true

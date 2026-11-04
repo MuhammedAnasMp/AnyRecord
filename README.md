@@ -8,7 +8,7 @@
 </p>
 
 ### Create polished demo videos in minutes
-[AnyRecord](https://muhammedanasmp.github.io/AnyRecord/) is your **open-source screen recorder** and editor for **walkthroughs, demos, product videos**, and more. 
+[AnyRecord](https://anastoyou.github.io/AnyRecord/) is your **open-source screen recorder** and editor for **walkthroughs, demos, product videos**, and more. 
 **Accepting PRs.**
 
 <img width="1280" height="720" alt="MP4 to GIF export (4)" src="https://github.com/user-attachments/assets/e6d68606-5fc0-4f70-99cd-7521982dc13b" />
@@ -22,10 +22,10 @@ Get the latest pre-built version of AnyRecord directly without compiling from so
 
 | Platform | Type | Direct Download Link |
 | :--- | :--- | :--- |
-| 🪟 **Windows** | Setup .exe (x64) | [**Download for Windows (.exe)**](https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-windows-x64.exe) |
-| 🍏 **macOS** | Disk Image .dmg (Apple Silicon M1-M4) | [**Download for macOS (.dmg)**](https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-arm64.dmg) |
-| 🐧 **Linux** | Standalone .AppImage (x64) | [**Download for Linux (.AppImage)**](https://github.com/MuhammedAnasMp/AnyRecord/releases/latest/download/AnyRecord-linux-x64.AppImage) |
-| 📦 **All Releases** | GitHub Releases | [**Browse All Releases & Notes**](https://github.com/MuhammedAnasMp/AnyRecord/releases) |
+| 🪟 **Windows** | Setup .exe (x64) | [**Download for Windows (.exe)**](https://github.com/anastoyou/AnyRecord/releases/latest/download/AnyRecord-windows-x64.exe) |
+| 🍏 **macOS** | Disk Image .dmg (Apple Silicon M1-M4) | [**Download for macOS (.dmg)**](https://github.com/anastoyou/AnyRecord/releases/latest/download/AnyRecord-arm64.dmg) |
+| 🐧 **Linux** | Standalone .AppImage (x64) | [**Download for Linux (.AppImage)**](https://github.com/anastoyou/AnyRecord/releases/latest/download/AnyRecord-linux-x64.AppImage) |
+| 📦 **All Releases** | GitHub Releases | [**Browse All Releases & Notes**](https://github.com/anastoyou/AnyRecord/releases) |
 ---
 ### Backed by the community
 <a href="https://coderabbit.link/recordly"><img width="400" alt="CodeRabbit Typemark" src="https://github.com/user-attachments/assets/3926ecfd-8652-4f2d-8da8-ac7641017cf5" /></a>
@@ -182,7 +182,7 @@ Browse and install community extensions from the [AnyRecord Marketplace](https:/
 
 Prebuilt releases are available at:
 
-https://github.com/MuhammedAnasMp/AnyRecord.in/releases
+https://github.com/anastoyou/AnyRecord.in/releases
 
 ---
 
@@ -215,7 +215,7 @@ sudo apt install build-essential cmake libx11-dev libxtst-dev libxrandr-dev libx
 ### Steps
 
 ```bash
-git clone https://github.com/MuhammedAnasMp/AnyRecord.git
+git clone https://github.com/anastoyou/AnyRecord.git
 cd AnyRecord
 npm install
 npm run dev
@@ -372,7 +372,7 @@ See `CONTRIBUTING.md` for guidelines.
 
 Bug reports and feature requests:
 
-https://github.com/MuhammedAnasMp/AnyRecord.in/issues
+https://github.com/anastoyou/AnyRecord.in/issues
 
 Pull requests are welcome.
 
@@ -386,7 +386,7 @@ AnyRecord is free and open-source software licensed under the **AGPL 3.0**. See 
 
 # Credits & Acknowledgements
 
-**AnyRecord** is developed and maintained by **Muhammed Anas** ([@MuhammedAnasMp](https://github.com/MuhammedAnasMp)).
+**AnyRecord** is developed and maintained by **Muhammed Anas** ([@anastoyou](https://github.com/anastoyou)).
 
 AnyRecord is built on open-source foundations and acknowledges the prior work of:
 - [Recordly](https://github.com/webadderallorg/Recordly) (AGPL 3.0) by webadderall

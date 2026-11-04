@@ -2,14 +2,14 @@
 	"name": "anyrecord",
 	"productName": "AnyRecord",
 	"description": "A free, creator-focused screen recorder with auto-zoom, cursor effects, backgrounds, annotations, and more - built for polished videos out of the box.",
-	"author": "MuhammedAnasMp",
-	"homepage": "https://github.com/MuhammedAnasMp/AnyRecord",
+	"author": "anastoyou",
+	"homepage": "https://github.com/anastoyou/AnyRecord",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/MuhammedAnasMp/AnyRecord.git"
+		"url": "https://github.com/anastoyou/AnyRecord.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MuhammedAnasMp/AnyRecord/issues"
+		"url": "https://github.com/anastoyou/AnyRecord/issues"
 	},
 	"private": true,
 	"version": "1.4.0",

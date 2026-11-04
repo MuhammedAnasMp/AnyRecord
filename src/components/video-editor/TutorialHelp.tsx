@@ -21,7 +21,7 @@ import { formatBinding, SHORTCUT_ACTIONS, SHORTCUT_LABELS } from "@/lib/shortcut
 import { formatShortcut } from "@/utils/platformUtils";
 import { toast } from "@/components/ui/toast";
 
-export const ANYRECORD_ISSUES_URL = "https://github.com/MuhammedAnasMp/AnyRecord/issues";
+export const ANYRECORD_ISSUES_URL = "https://github.com/anastoyou/AnyRecord/issues";
 // Set to your community invite link to show the Discord button.
 const ANYRECORD_DISCORD_URL: string = "";
 export const APP_HEADER_ACTION_BUTTON_CLASS =

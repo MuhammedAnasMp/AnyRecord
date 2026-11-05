@@ -119,11 +119,15 @@ for s in png_sizes:
 print("2. Generating icons/icons/win/icon.ico...")
 win_ico_path = os.path.join(ICONS_WIN_DIR, "icon.ico")
 build_windows_ico([16, 24, 32, 48, 64, 128, 256], win_ico_path)
+shutil.copy2(win_ico_path, os.path.join(BRANDING_ICONS_DIR, "icon.ico"))
 
-print("3. Generating icons/icons/mac/icon.icns...")
+print("3. Generating icons/icons/mac/icon.icns and build/icon.icns...")
 os.makedirs(ICONS_MAC_DIR, exist_ok=True)
 mac_icns_path = os.path.join(ICONS_MAC_DIR, "icon.icns")
 im1024.save(mac_icns_path, format="ICNS")
+shutil.copy2(mac_icns_path, os.path.join(BRANDING_ICONS_DIR, "icon.icns"))
+os.makedirs(os.path.join(BASE_DIR, "build"), exist_ok=True)
+shutil.copy2(mac_icns_path, os.path.join(BASE_DIR, "build", "icon.icns"))
 print(f"   Saved {mac_icns_path}")
 
 print("4. Updating public/app-icons/ and dist/app-icons/...")
@@ -144,11 +148,16 @@ for s in app_icon_sizes:
     bp = os.path.join(BRANDING_ICONS_DIR, f"icon-{s}.png")
     img.save(bp, "PNG")
 
-print("5. Generating public/favicon.ico...")
+print("5. Generating public/favicon.ico and docs/favicon.ico...")
 public_ico_path = os.path.join(PUBLIC_DIR, "favicon.ico")
 build_windows_ico([16, 32, 48], public_ico_path)
+docs_ico_path = os.path.join(BASE_DIR, "docs", "favicon.ico")
+shutil.copy2(public_ico_path, docs_ico_path)
 
-print("6. Updating services icons...")
+print("6. Updating docs and services icons...")
+docs_logo_path = os.path.join(BASE_DIR, "docs", "assets", "logo.png")
+os.makedirs(os.path.dirname(docs_logo_path), exist_ok=True)
+get_image_for_size(128).save(docs_logo_path, "PNG")
 services_dirs = [
     os.path.join(BASE_DIR, "services", "recordly-share", "worker"),
     os.path.join(BASE_DIR, "services", "recordly-share", "worker", "web", "dist"),

@@ -2,7 +2,8 @@ import os
 import shutil
 import struct
 import io
-from PIL import Image
+import numpy as np
+from PIL import Image, ImageDraw
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BRANDING_DIR = os.path.join(BASE_DIR, "branding")
@@ -17,7 +18,29 @@ PUBLIC_DIR = os.path.join(BASE_DIR, "public")
 
 source_1024_path = os.path.join(LOGO_DIR, "anyrecord-1024.png")
 
-im1024 = Image.open(source_1024_path).convert("RGBA")
+raw_img = Image.open(source_1024_path).convert("RGBA")
+# Crop out extra transparent padding if present so icon fills the canvas
+raw_alpha = np.array(raw_img)[:, :, 3]
+y_idx, x_idx = np.where(raw_alpha > 0)
+if len(y_idx) > 0 and (y_idx.min() > 20 or x_idx.min() > 20):
+    content_box = (int(x_idx.min()), int(y_idx.min()), int(x_idx.max() + 1), int(y_idx.max() + 1))
+    cropped = raw_img.crop(content_box)
+else:
+    cropped = raw_img
+
+im1024 = cropped.resize((1024, 1024), Image.Resampling.LANCZOS)
+
+# Apply 4x super-sampled smooth rounded corner mask (~23.5% radius for distinct, smooth rounded edges)
+scale = 4
+big_size = (1024 * scale, 1024 * scale)
+big_radius = int(1024 * 0.235 * scale)
+mask_hi = Image.new("L", big_size, 0)
+draw = ImageDraw.Draw(mask_hi)
+draw.rounded_rectangle([(0, 0), (big_size[0] - 1, big_size[1] - 1)], radius=big_radius, fill=255)
+mask = mask_hi.resize((1024, 1024), Image.Resampling.LANCZOS)
+im1024.putalpha(mask)
+# Update master icon
+im1024.save(source_1024_path, "PNG")
 
 def get_image_for_size(size):
     return im1024.resize((size, size), Image.Resampling.LANCZOS)
